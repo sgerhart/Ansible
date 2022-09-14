@@ -1,0 +1,13 @@
+localhost ansible_connect=local
+
+[apic]
+10.87.96.214
+
+[scp]
+192.168.3.23
+
+[all:vars]
+user = 'admin'
+pass = 'C!sco#123'
+scp_user = 'cisco'
+scp_password = 'C!sco#123'

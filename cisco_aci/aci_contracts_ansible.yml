@@ -1,0 +1,291 @@
+- name: create fabric nodes
+  hosts: apic
+  connection: local
+  gather_facts: no
+  tasks:
+   - name: EGP-APP Consume Contract Common/Shared-Services-ICMP
+     aci_rest:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       path: /api/node/mo/uni/tn-ansible/ap-3tier/epg-app_epg.json
+       method: post
+       content:
+         {
+           "fvRsCons": {
+              "attributes": {
+              "tnVzBrCPName":"shared-services-icmp",
+              "status":"created,modified"
+              },
+              "children":[]
+            }
+         }
+   - name: EGP-APP Consume Contract Common/Shared-Services-DNS-NTP
+     aci_rest:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       path: /api/node/mo/uni/tn-ansible/ap-3tier/epg-app_epg.json
+       method: post
+       content:
+         {
+           "fvRsCons": {
+              "attributes": {
+              "tnVzBrCPName":"shared-services-dns-ntp",
+              "status":"created,modified"
+              },
+              "children":[]
+            }
+         }
+
+   - name: EGP-DB Consume Contract Common/Shared-Services-ICMP
+     aci_rest:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       path: /api/node/mo/uni/tn-ansible/ap-3tier/epg-db_epg.json
+       method: post
+       content:
+         {
+           "fvRsCons": {
+              "attributes": {
+              "tnVzBrCPName":"shared-services-icmp",
+              "status":"created,modified"
+              },
+              "children":[]
+            }
+         }
+   - name: EGP-DB Consume Contract Common/Shared-Services-DNS-NTP
+     aci_rest:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       path: /api/node/mo/uni/tn-ansible/ap-3tier/epg-db_epg.json
+       method: post
+       content:
+         {
+           "fvRsCons": {
+              "attributes": {
+              "tnVzBrCPName":"shared-services-dns-ntp",
+              "status":"created,modified"
+              },
+              "children":[]
+            }
+         }
+
+   - name: EGP-WEB Consume Contract Common/Shared-Services-ICMP
+     aci_rest:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       path: /api/node/mo/uni/tn-ansible/ap-3tier/epg-web_epg.json
+       method: post
+       content:
+         {
+           "fvRsCons": {
+              "attributes": {
+              "tnVzBrCPName":"shared-services-icmp",
+              "status":"created,modified"
+              },
+              "children":[]
+            }
+         }
+   - name: EGP-WEB Consume Contract Common/Shared-Services-DNS-NTP
+     aci_rest:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       path: /api/node/mo/uni/tn-ansible/ap-3tier/epg-web_epg.json
+       method: post
+       content:
+         {
+           "fvRsCons": {
+              "attributes": {
+              "tnVzBrCPName":"shared-services-dns-ntp",
+              "status":"created,modified"
+              },
+              "children":[]
+            }
+         }
+
+   - name: Export L3-Out-InfraServices Contract from Common to Tenant Ansible
+     aci_rest:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       path: /api/node/mo/uni/tn-ansible/cif-l3_Out_Ansible.json
+       method: post
+       content:
+         {
+           "vzCPIf": {
+              "attributes": {
+              "dn":"uni/tn-ansible/cif-l3_Out_Ansible",
+              "name":"l3_Out_Ansible",
+              "status":"created,modified"
+              },
+              "children":[
+                { "vzRsIf": {
+                    "attributes":{
+                      "tDn":"uni/tn-common/brc-l3-out-infraServices",
+                      "status":"created,modified"
+                    },
+                    "children":[]
+                }
+                }
+              ]
+            }
+         }
+
+   - name: Consume L3 Out Contract APP_EPG
+     aci_rest:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       path: /api/node/mo/uni/tn-ansible/ap-3tier/epg-app_epg.json
+       method: post
+       content:
+         {
+           "fvRsConsIf": {
+              "attributes": {
+              "tnVzCPIfName":"l3_Out_Ansible",
+              "status":"created,modified"
+              },
+              "children":[]
+
+
+            }
+         }
+   - name: Consume L3 Out Contract DB_EPG
+     aci_rest:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       path: /api/node/mo/uni/tn-ansible/ap-3tier/epg-db_epg.json
+       method: post
+       content:
+         {
+           "fvRsConsIf": {
+              "attributes": {
+              "tnVzCPIfName":"l3_Out_Ansible",
+              "status":"created,modified"
+              },
+              "children":[]
+
+
+            }
+         }
+
+   - name: Consume L3 Out Contract WEB_EPG
+     aci_rest:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       path: /api/node/mo/uni/tn-ansible/ap-3tier/epg-web_epg.json
+       method: post
+       content:
+         {
+           "fvRsConsIf": {
+              "attributes": {
+              "tnVzCPIfName":"l3_Out_Ansible",
+              "status":"created,modified"
+              },
+              "children":[]
+
+
+            }
+         }
+
+   - name: Add a new contract for App to DB
+     aci_contract:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       tenant: ansible
+       contract: app_to_db
+       description: Communication between web-servers and database
+       scope: context
+       state: present
+
+   - name: Add a new contract subject
+     aci_contract_subject:
+        host: "{{ inventory_hostname }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+        validate_certs: no
+        tenant: ansible
+        contract: app_to_db
+        subject: any
+        description: allow any
+        reverse_filter: yes
+        priority: level1
+        dscp: unspecified
+        state: present
+
+   - name: Add a new filter
+     aci_filter:
+        host: "{{ inventory_hostname }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+        validate_certs: no
+        filter: any
+        description: any
+        tenant: ansible
+        state: present
+
+   - name: Add a new filter entry
+     aci_filter_entry:
+        host: "{{ inventory_hostname }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+        validate_certs: no
+        tenant: ansible
+        entry: any
+        filter: any
+   - name: Add a new contract subject to filer binding
+     aci_contract_subject_to_filter:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       tenant: ansible
+       contract: app_to_db
+       subject: any
+       filter: any
+       state: present
+
+   - name: Add a new contract to APP_EPG
+     aci_epg_to_contract:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       tenant: ansible
+       ap: 3tier
+       epg: app_epg
+       contract: app_to_db
+       contract_type: consumer
+       state: present
+
+   - name: Add a new contract to EPG_BD
+     aci_epg_to_contract:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       tenant: ansible
+       ap: 3tier
+       epg: db_epg
+       contract: app_to_db
+       contract_type: provider
+       state: present

@@ -1,0 +1,15 @@
+- name: create fabric nodes
+  hosts: apic
+  connection: local
+  gather_facts: no
+  tasks:
+   - name: firmware policy
+     aci_firmware_policy:
+        host: "{{ inventory_hostname }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+        validate_certs: no
+        name: test
+        version: n9000-14.1(1i)
+        ignoreCompat: False
+        state: present

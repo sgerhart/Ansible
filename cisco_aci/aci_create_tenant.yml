@@ -1,0 +1,15 @@
+- name: create fabric nodes
+  hosts: apic
+  connection: local
+  gather_facts: no
+  tasks:
+   - name: tenant ansible
+     aci_tenant:
+        host: "{{ inventory_hostname }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+        tenant: ansible
+        description: ansible production tenant
+        validate_certs: no
+        state: present
+     delegate_to: localhost

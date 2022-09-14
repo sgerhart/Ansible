@@ -1,0 +1,14 @@
+- name: create fabric nodes
+  hosts: apic
+  connection: local
+  gather_facts: no
+  tasks:
+   - name: maintenance group
+     aci_maintenance_group_node:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       group: test
+       node: 2002
+       state: present

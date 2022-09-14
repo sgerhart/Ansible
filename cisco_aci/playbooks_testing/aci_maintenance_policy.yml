@@ -1,0 +1,14 @@
+- name: create fabric nodes
+  hosts: apic
+  connection: local
+  gather_facts: no
+  tasks:
+   - name: Ensure maintenance policy is present
+     aci_maintenance_policy:
+       host: '{{ inventory_hostname }}'
+       username: '{{ user }}'
+       password: '{{ pass }}'
+       validate_certs: no
+       name: test
+       scheduler: test
+       state: present

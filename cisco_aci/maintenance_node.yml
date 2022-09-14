@@ -1,0 +1,31 @@
+Protect Hosting Environment (SAH)
+CheckPoint Firewalls
+Zone3 - Public Facing Address
+No Hosting External AWS
+SAP Sales Force, Access GSK (SSO) PING Federate, 
+    Workday, O365 - VTP points to GTM (UK or US)
+    Accerated with Accumi
+Proxy System the FTP Servers
+B2B connections Seperate Firewalls, Merck, College
+GDC, Stevenage, Colo - Does share IP space
+VPN Access - Termiate
+FailCatalyst - Internet2
+
+
+1) how many applications reside on the DMZ
+    Quanity? - Sales Applications, SAP, Acccess GSK which is their SSO or MFA. They also have B2B apps which is either between other pharmas, Merck, Pfizer as well as conneticity for academic purposes. They also have connections into Internet2
+2) size of the infrastructure, how many devices - fw load balancers, VMs etc
+    Hard to get a complete number - Few pairs of firewalls and switches per Carrier Hotel, VMs? 
+3) level of obsolescence, EOL etc
+    The overall infratructure, switching, FW, that supports the DMZ connectivity is EOL, most if not all appliations run on their VM Infra
+4) any active plans to transform
+    They are looking at newer designs for their carrier hotesl to replace their EOL infrastructure. 
+5) location of DMZ - colo? On prem?
+    On prem and colo, main is their two main DC, PA and Stevenage. The Colo in PA hosts their DMZ DR
+6) how cloud adopted the customer is
+    They are utilizing Azure, my understanding is that it still in the initial phase. They are still trying to find their way
+    
+    
+    ==> pyenv-virtualenv
+To enable auto-activation add to your profile:
+  if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi

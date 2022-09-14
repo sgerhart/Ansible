@@ -1,0 +1,13 @@
+- name: create fabric nodes
+  hosts: apic
+  connection: local
+  gather_facts: no
+  tasks:
+   - name: Simple Scheduler (Empty)
+     aci_fabric_scheduler:
+       host: "{{ inventory_hostname }}"
+       username: "{{ user }}"
+       password: "{{ pass }}"
+       validate_certs: no
+       name: test
+       state: present

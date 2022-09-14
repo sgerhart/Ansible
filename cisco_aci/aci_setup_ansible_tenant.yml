@@ -1,0 +1,174 @@
+- name: create fabric nodes
+  hosts: apic
+  connection: local
+  gather_facts: no
+  tasks:
+     - name: create vrf
+       aci_vrf:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          vrf: vrf_ansible
+          tenant: ansible
+          descr: ansible vrf testing change
+          policy_control_preference: enforced
+          policy_control_direction: ingress
+          state: present
+
+     - name: application profile (3 Tier App)
+       aci_ap:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          ap: 3tier
+          description: 3 Tier Application
+          state: present
+
+     - name: create bridge domain for WEB epg
+       aci_bd:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          bd: web_epg_bd
+          vrf: vrf_ansible
+          state: present
+
+     - name: add subnet web_epg_bd
+       aci_bd_subnet:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          bd: web_epg_bd
+          gateway: 192.168.30.254
+          mask: 24
+          scope: [public, shared]
+          state: present
+
+     - name: create web epg
+       aci_epg:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          ap: 3tier
+          bd: web_epg_bd
+          epg: web_epg
+          description: Web EPG
+          state: present
+
+     - name: Add a VMM domain to Web EPG
+       aci_epg_to_domain:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          ap: 3tier
+          epg: web_epg
+          domain: malvern-aci-65
+          domain_type: vmm
+          vm_provider: vmware
+          state: present
+
+     - name: create bridge domain for APP epg
+       aci_bd:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          bd: app_epg_bd
+          vrf: vrf_ansible
+          state: present
+
+     - name: add subnet app_epg_bd
+       aci_bd_subnet:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          bd: app_epg_bd
+          gateway: 192.168.31.254
+          scope: [public, shared]
+          mask: 24
+          state: present
+
+     - name: create bridge domain for DB epg
+       aci_bd:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          bd: db_epg_bd
+          vrf: vrf_ansible
+          state: present
+
+     - name: add subnet db_epg_bd
+       aci_bd_subnet:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          bd: db_epg_bd
+          gateway: 192.168.32.254
+          mask: 24
+          scope: [public, shared]
+          state: present
+
+     - name: add epg app and db
+       aci_epg:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          ap: 3tier
+          epg: "{{ item.epg }}"
+          bd: "{{ item.bd }}"
+          priority: unspecified
+          intra_epg_isolation: unenforced
+          state: present
+       with_items:
+          - epg: app_epg
+            bd: app_epg_bd
+          - epg: db_epg
+            bd: db_epg_bd
+
+     - name: Add a VMM domain to App EPG
+       aci_epg_to_domain:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          ap: 3tier
+          epg: app_epg
+          domain: malvern-aci-65
+          domain_type: vmm
+          vm_provider: vmware
+          state: present
+
+     - name: Add a VMM domain to DB EPG
+       aci_epg_to_domain:
+          host: "{{ inventory_hostname }}"
+          username: "{{ user }}"
+          password: "{{ pass }}"
+          validate_certs: no
+          tenant: ansible
+          ap: 3tier
+          epg: db_epg
+          domain: malvern-aci-65
+          domain_type: vmm
+          vm_provider: vmware
+          state: present
